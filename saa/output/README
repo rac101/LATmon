@@ -1,0 +1,10 @@
+output files from SAA report checking are in this sub-directory: ~/LATmetrics/saa/output
+saax.txt - summaries of comparisons/checks of the latest SAA report with its predecessor.
+SAAcheck.txt - "reversed" version of saax.txt, with latest results at start of file.
+chex00.txt - include first and last SAA transits in min, max, avg delta T calculations.
+chex11.txt - exclude first and last SAA transits from min, max, avg delta T calculations.
+chex340.txt - restrict checking to the first 340 SAA transits of each report.
+=======
+scripts: 
+
+./reversefile.pl < saax.txt > SAAcheck.txt   # reverses the ordering of the SAA report checks

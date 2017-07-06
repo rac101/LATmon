@@ -1,0 +1,56 @@
+to collect data to go into the updated version of Eric Siskind's spreadsheet
+to track the LAT daily event rate, do the following:
+
+"gem.sent" is the master ASCII file tracking the daily LHKGEMSENT counter
+
+0. set up the ISOC environment
+rac> isocops
+
+1. check the dates to be used with the script buildlist.pl:
+rac> ./buildlist.pl
+37 lines read from gem.sent : the last valid date is 2011-06-06
+MnemRet.py -b '2011-06-07 13:27:00' -e '+45 seconds' LHKGEMSENT | sample.pl
+MnemRet.py -b '2011-06-08 13:27:00' -e '+45 seconds' LHKGEMSENT | sample.pl
+MnemRet.py -b '2011-06-09 13:27:00' -e '+45 seconds' LHKGEMSENT | sample.pl
+
+2. if things look ok from step 1, update the file gem.sent 
+rac> ./triglist.pl >> gem.sent
+
+3. to confirm that "gem.sent" is up to date, re-run buildlist.pl
+rac> ./buildlist.pl
+40 lines read from gem.sent : the last valid date is 2011-06-09
+gem.sent is up to date
+
+4. to get the one column of interest for copy and paste to the spreadsheet, do:
+
+rac> tail -20 gem.sent |  perl -ane 'print "$F[4]\n"'
+
+4. to check the time continuity of history of daily GEM SENT count, use xsent.py;
+# usage: ./xsent.py < gem.sent
+
+===============================================================
+HOT NEWS for 2012: 
+-----------------
+the file trigrate.jana in the "jana" sub-directory is also being updated, 
+for making the LAT trigger rate plot in the second worksheet of the SSR
+data rate plot on that worksheet.
+
+===============================================================
+
+here's what you have to do when the LAT is rebooted for any reason
+(typically starting a new FSW build)
+
+1. find the date and time of the LAT reboot, e.g. from the LAT Diary in Confluence
+
+2. isocops (if not already done)
+
+3. MnemRet.py -b '2011-10-12 16:15:00' -e '+245 seconds' LHKGEMSENT > restart.2011oct12
+
+4. Get the last LHKGEMSENT before the reboot, and the first LHKGEMSENT after the reboot
+
+------
+
+FYI, here is a handy way to get the "seconds from 1970" timestamp 
+for a UTC date/time for the lines returned by MnemRet.py
+rac> date -u -d '2010-09-12 13:27:22' +%s
+1284298042

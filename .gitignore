@@ -1,0 +1,17 @@
+# ignore everything except explicitly included files in the repository
+*
+
+# explicitly allowed files in the repository
+!*.pl
+!*.py
+!README
+!.gitignore
+
+# allow the above few files, even in subdirectories
+!*/
+
+# ignore a few exceptions to the above allowed files
+users/rac/LATmetrics/getssr.pl
+planning/obsolete/*
+planning/400/*
+memerr/catchup/*

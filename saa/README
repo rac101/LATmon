@@ -1,0 +1,80 @@
+The path to the SAA reports is:
+/nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy/YYYY/MM/
+for example:
+/nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy/2014/12/
+
+My listing of SAA reports is in ./SAA.reports <<< ensure the latest correct SAA report is at the end of this file!!
+My copies of SAA reports are in the subdirectory ./reports
+My full-mission summary of SAA reports comparisons are in ./output 
+===================
+cron: ~/cron.SAA
+===================
+perl scripts: 
+l8stsaax.pl: very verbose and colorful: finds and compares the latest 2 SAA reports in the FastCopy archive. Only outputs to STDOUT
+l8stsaax1.pl: not verbose and colorful: finds and compares the latest 2 SAA reports in the FastCopy archive. Only outputs to STDOUT
+l8stsaax-bw.pl: very verbose and B/W: finds and compares the latest 2 SAA reports in the FastCopy archive. Only outputs to STDOUT
+l8stsaax1-bw.pl: not verbose and B/W: finds and compares the latest 2 SAA reports in the FastCopy archive. Only outputs to STDOUT
+2saax.pl: version of 4lsaax.pl that compares 2 SAA reports which are provided as the arguments to the script
+4lsaax.pl: does 4 checks - suitable for cron. Updates my SAA archives. STDOUT output suitable for redirection to append to ./output/saax.txt
+tasaax.pl: compare successive SAA reports, calculate min, max, avg delta T between reports.
+cssaax.pl: check if SAA entries can have the same orbit number.
+psaax.pl: look for and collect new SAA reports in the FastCopy archive.
+ppsaax.pl: print out the entry and exit dT's for all matched SAAs in the pair of reports.
+xasaax.pl:  look for SAA transits that appear or disappear in pairs of reports
+mv2arch.pl: copy SAA reports from the FastCopy archive into my own archive.
+===================
+output files from SAA report checking are in the sub-directory ./output
+saax.txt
+SAAcheck.txt - "reversed" version of saax.txt, with latest results at start of file.
+chex00.txt - include first and last SAA transits in min, max, avg delta T calculations. 
+chex11.txt - exclude first and last SAA transits from min, max, avg delta T calculations. 
+chex340.txt - restrict checking to the first 340 SAA transits of each report
+===================
+===================
+===================
+===================
+Plan: Create a daily cron task, to look for new SAA reports, and compare
+times of SAA transits to the equivalent times from the previous report.
+If any SAA transit times change by more than 30 seconds, issue a message.
+
+tasks: 
+1. remember latest SAA report filename and path, as follows:
+> tail -1 SAA.reports
+
+2. search for new SAA report files - look in the current and previous /year/month/DOY.*/
+search as follows:
+> cd /nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy/2014/
+> find ./10/ -name 'L201*SAA*' -print
+> cd /nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy/
+> find $PWD/2015/01/00*/ -name 'L201*SAA*'
+> find /nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy/2014/10/ -name 'L201*SAA*' -print >> SAA.reports   
+  NOTE: may find more than 1 new SAA report file.
+****>>>  If multiple new report files are found, sort them into the correct order, and process them in that order.
+  sort using the UNIX "sort" command.
+
+3. Can append new files to the end of a file of SAA report path+filenames. 
+Will need to time sort them first.
+The UNIX "sort" command will do this sorting okay.
+
+4. the path to the SAA reports is:
+/nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy/YYYY/MM/
+for example:
+/nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy/2014/12/
+
+5. when checking a SAA reports against a previous SAA report, 
+the 8 useful information items to extract and archive with the filename+path are:
+ - the index number for the report file
+ - the index number of the previous report file used in the comparison
+ - the number of lines (i.e. SAA transits) in the input file
+ - the number of SAA transits matched to the previous file
+ - the minimum dT between SAA events (integer seconds, with sign)
+ - the maximum dT between SAA events (integer seconds, with sign)
+ - the average dT between SAA events (integer seconds, with sign)
+ - the median  dT between SAA events (integer seconds, with sign)
+==============
+how to parse an SAA file:
+check if there are ever 2 SAA entries with the same orbit number.
+check if there are ever 2 SAA exits with the same orbit number.
+"Start Time (UTCJFOUR)","Start Pass","Stop Time (UTCJFOUR)","Stop Pass","Duration (min)"
+363/2014 07:48:00.117,"36096",363/2014 08:05:17.915,"36096",17.297
+363/2014 09:25:16.669,"36097",363/2014 09:48:54.545,"36097",23.631

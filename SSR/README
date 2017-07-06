@@ -1,0 +1,24 @@
+steps for updating SSR usage weekly or quarterly trending plot
+
+login to isoc-ops1 
+> $ source AFS_HOME/.alias
+> $ u55 (cd to /nfs/farm/g/glast/u55/rac , i.e. /a/sulky55/g.glast.u55/rac/SSR)
+> $ cd SSR (cd to SSR sub-directory)
+> $ isocops (setup isoc environment, aliased to source /u/gl/glastops/flightops.csh)
+> $ ./SsrUsage.py -b '-15 days' -e '2012-06-30 00:00:00' -d >> ssr.history
+
+Then for adding to the excel spreadsheet:
+
+> tail -20 ssr.history | perl -ane 'print "$F[19]\n"'
+
+==================
+2012 June
+
+The above summary of steps is obsolete.
+Daily SSR usage by the LAT is now recorded by trscron into ssr.history, 
+using the perl script "getssr.pl", which invokes SsrUsage.py
+
+See ~/cron.nightly for timing of running getssr.pl each day.
+
+Check time continuity of history of daily SSR Usage
+> $ ./xssr.py < ssr.history

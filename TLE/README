@@ -1,0 +1,16 @@
+the Celestrak.com URL for fetching Fermi TLEs is:
+http://celestrak.com/NORAD/elements/science.txt
+
+look for FGRST (GLAST) = satellite number 33053
+
+a typical entry in the file is:
+FGRST (GLAST)           
+1 33053U 08029A   13295.49203983  .00002156  00000-0  12025-3 0  4331
+2 33053  25.5837  63.0469 0014097   5.4700  58.4448 15.07392089295554
+
+in Perl, look for a line in the file using: /^1 33053U 08029A/ and /^2 33053/
+
+consider using either curl, lynx or wget to retrieve the TLE data from the website.
+
+The Fermi TLE records are gathered daily using get_tle.pl via cron job, 
+and appended to TLE.txt as 1-line records

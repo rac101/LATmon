@@ -1,0 +1,28 @@
+MnemRet.py -b '-20 minutes' -e now LTC00HTRSTATE LTC06STATE LTC07STATE
+
+1. use the perl script gethtr-2args.pl to gather information about the turn-on numbers for each LAT VCHP,
+and append the daily summary lines to the file "htr.history".
+
+gethtr-2args.pl takes 2 command line arguments: the starting date and the ending date, for getting daily VCHP statistics.
+
+./gethtr-2args.pl 2013-09-06 2013-09-15 >> htr.history
+
+NOTE: the ordering of the VCHP numbers in the file "htr.history" is 
+VCHP00
+VCHP06
+VCHP07
+then other the other 9 VCHPs in numerical order, if they are turned on at all during the given day (typically not).
+for each VCHP, 3 numbers are written to the line in the output file: 
+ - VCHP# (e.g. 00, 06, 07, 11); 
+ - the number of samples in telemetry for that day for that VCHP (typically 7353 or 7354)
+ - the number of telemetry samples in that day where that VCHP is turned on (typically ranges from 0 to a few hundred)
+
+=======NEW INFO===========
+1. check for time gaps in the heater history file:
+./xhtr.pl < htr.history
+
+2. to manually update the heater history file:
+./gethtr-0args.pl >> htr.history
+
+3. to keep the heater history file up to date by cron job:
+./LTC/gethtr-1day.pl >> ./LTC/htr.history

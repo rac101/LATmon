@@ -1,0 +1,20 @@
+The following are currently used, running on lnxcron
+cron.MP
+cron.SAA
+cron.hourly
+cron.nightly
+
+on any SLAC unix/linux server, you can use trscrontab -l to see how the above are used:
+rhel6-64f:rac> trscrontab -l
+lnxcron 25 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.SAA
+lnxcron 30 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.MP
+lnxcron 47 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.hourly
+lnxcron 28 2 * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.nightly
+
+The following are obsolete:
+cron.daily
+crontab.SAA
+crontab.daily
+crontab.hourly
+crontab.nightly
+

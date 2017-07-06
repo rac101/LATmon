@@ -1,0 +1,29 @@
+here is the path to the XML files for the photodiode gains (as MeV to DAC units):
+
+/nfs/farm/g/glast/u/chehtman/calibGenCAL_analysis/calib_for_pass7reproc
+or
+/afs/slac.stanford.edu/g/glast/ground/releases/calibrations/CAL/p7repro
+
+gain files are listed in "gainfiles" (as of August 2014)
+
+on my laptop: 
+plots for quarterly reviews are made in the spreadsheet: MPD.xlsx
+
+simple filtering of the XML files:
+
+grep -i "<mevperdac small" fit_proton_calib_418m_422m_bigsum.calMPD.xml
+produces 1536 lines of the form:
+<mevPerDac smallSig="1.742690" bigVal="0.401917" smallVal="21.741199" bigSig="0.032216">
+<mevPerDac smallSig="1.687350" bigVal="0.395347" smallVal="21.050699" bigSig="0.031690">
+
+STEPS
+================
+
+1. use the script "allprogain.pl" on the SLAC farm to calculate values to go into the spreadsheet on the laptop:
+
+mv runall.output runall.output.old
+ls -1 ./GMU-CAL-XML/*proton_cal*PD.xml | allprogain.pl > runall.output
+diff runall.output runall.output.old
+
+2. add the new lines to the spreadsheet on my laptop: MPD.xlsx
+and redo the plots in the spreadsheet

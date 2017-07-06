@@ -1,0 +1,54 @@
+Scripts for checking on memory errors, copied from ~jana/utils/memerr/
+
+Robert Cameron
+May 2012
+
+NOTE: /Users/rac/Documents/GLAST/ISOC/LATmetrics/memerr is the area on my Mac where I make 
+      the geographic plots of memory error locations for LAT quarterly trending reports
+
+The file "geosaa.out" contains a list of all LAT memory errors since the start of the science mission.
+Search for memory errors using "PktDump.py --apid 718" has been extended back into L&EO to about 2008-07-22, 
+without finding any memory errors earlier than 2008-08-02 14:55:25.919560.
+
+Geo coordinates and SAA in/out are attached for all memory errors.
+The file stays 3 days in the past, to allow plenty of time for the MOC to deliver all LAT data to SLAC.
+
+Running by cron: geosaa.pl >> geosaa.out
+================
+I run the script "geosaa.pl" daily.
+to keep up with the daily memory errors.
+NOTE: I am required to use the appropriate computer: lnxcron.slac.stanford.edu
+NOTE: I am required to put the task into trscrontab, not crontab, to be able to access AFS,
+and so to setup the ISOC environment, to correctly use MnemRet.py and PktDump.py, etc.
+lnxcron:rac> trscrontab -l
+lnxcron 8 3 * * * source /u/gl/glastops/flightops.sh; /nfs/farm/g/glast/u55/rac/LATmetrics/memerr/geosaa.pl >> /nfs/farm/g/glast/u55/rac/LATmetrics/memerr/geosaa.out
+
+key commands run in the script geosaa.pl are:
+PktDump.py --apid 718 -b '-1 days' -e '2012-04-19 00:00:00'
+MnemRet.py -b '-1 seconds' -e '2012-04-19 00:00:00' SGPSBA_LONGITUDE SGPSBA_LATITUDE SACFLAGLATINSAA
+
+Tabulating total memory errors:
+===============================
+./counts.pl < geosaa.out
+./rate.pl < geosaa.out - tabulate error totals (single, multi, total) per 1 million and 10 million seconds of MET
+./xmemerr.py < geosaa.out - check for gaps etc in geosaa.out
+
+Quarterly plot of errors inside the SAA: 
+========================================
+getqdat.pl YYYY Q > output_file
+getqdat.pl 2012 4 > idl-2012-q4.inp
+then see the IDL code and README on the laptop, at /Users/rac/Documents/GLAST/ISOC/LATmetrics/memerr/
+
+Fraction of errors inside the SAA:
+===================================
+divide second line count by first line count
+perl -ane 'next if (@F != 15); print "$F[-3] $F[-2] $F[-1]\n"' < geosaa.out | wc -l
+perl -ane 'next if (@F != 15); print "$F[-3] $F[-2] $F[-1]\n" if $F[-1]' < geosaa.out | wc -l
+
+Precursor step to making the Gary Godfrey plot:
+=============================
+
+perl -ane 'next if (@F != 15); $F[1] =~ s/-/ /g; $F[2] =~ s/:/ /g; $F[3] =~ s/\(//; chop $F[3]; print "$F[1] $F[2] $F[3] $F[-3] $F[-2] $F[-1]\n"' < geosaa.out > idl.inp
+perl -ane 'next if (@F != 15); print "$F[-3] $F[-2] $F[-1]\n"' < geosaa.out > idl.input
+
+Or use the Perl script: getqdat.pl

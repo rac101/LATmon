@@ -1,0 +1,78 @@
+The files and scripts in this directory support Fermi LAT mission planning
+Robert Cameron, March 2016
+
+Key scripts are run by cron: see ~/cron.MP
+
+Fermi mission planning support/review scripts
+      fakeATS.pl
+      makeATS.pl
+      filistEphem.pl
+      filistSAA.pl
+      moveMPfiles.pl
+
+Programs summaries: 
+filistEphem.pl: maintain an up-to-date list of GLAST ephemeris reports
+
+filistSAA.pl: maintain an up-to-date list of SAA reports
+
+fakeATS.pl (or fakeATSReview-of.pl, which outputs to $mpmw.revfake)
+takes no command line arguments. Looks for my cron-updated listings of SAA reports
+and GLAST ephemeris files to get latest versions to use. Makes a product that can 
+be diffed against a .csv copy of the "ATS Review" product from the MP webviewer.
+Calculates appropriate MW from run date.
+    ARGS: None
+    SWITCHES (all optional)
+    	     -p ("plan")  # flag: 1 = "Planned", 0 = "ATSreview" for type of fake MPV product produced
+             -f ("force") # flag: 1 = run to completion even if dates are wrong or outfile exists
+             -o ("ofile") # flag: 1 = send output to a file with standard name starting with MW: either "MWplan.fake" or "MWrev.fake"
+    OUTPUT: file can be diffed against a .csv copy of plan review product from the MP webviewer.
+    CRON: Suitable for running weekly by cron.
+    REVIEW: suited - baseline product is available on the "Planned" or "ATS Review" tab in the MP webviewer. 
+    CAVEATS: output only includes commands for LPASTOP, LPASTART, LATBIASVUP and LATSUROMDUMP  
+
+makeATS.pl (or makeATS-of.pl, which outputs to $mpmw.atsfake)
+Looks for my cron-updated listings of SAA reports and GLAST ephemeris files 
+to get latest versions to use. Also can use ATS database to get starting values 
+for runID and tranID. Calculates appropriate MW from run date.
+    ARGS (optional): starting-runID starting-tranID 
+    SWITCHES (all optional): 	 
+	      -force (-f): run even if output filename already exists and dates are wrong
+	      -getid (-g): read the file LATATSfake.history to get best guess 
+	      	      	    starting values for runID and tranID
+    	      -ofile (-o): output faked ATS to the filename $MPMW.atsfake 
+	      	     	   or to $MPMW.ats0fake if all runIDs and tranIDs = 0
+	      -track (-t): add IDs for the planned week to the file LATATSfake.history
+    NOTE: script will use 0 for all runIDs and tranIDs if none are supplied or gotten
+    OUTPUT: can be diffed against the weekly ATS text file that is FastCopied to NASA.
+    CRON: Suitable for running weekly by cron.
+    REVIEW: not suited - too late
+
+2makeATS.pl
+Looks for my cron-updated listings of SAA reports and GLAST ephemeris files 
+to get latest versions to use. Only sets 0 for runID and tranID values. 
+Calculates appropriate MW from run date.
+    SWITCHES (all optional): 	 
+	      -force (-f): run even if output filename already exists and dates are wrong
+    	      -ofile (-o): output faked ATS to the filename $MPMW.ats2fake 
+    NOTE: to be followed by running script "updateIDs.pl" to set correct runID and tranID values.
+    OUTPUT: can be diffed against the weekly ATS text file that is FastCopied to NASA.
+    CRON: Suitable for running weekly by cron.
+    REVIEW: not suited - too late
+
+moveMPfiles.pl
+Copies output files from the "-of.pl" versions of the above scripts to the www-ops
+directory.
+   ARGS: none
+   OUTPUT: none
+   CRON: yes
+   REVIEW: makes files MP available for review in www-ops 
+
+updateIDs.pl
+Meant to be run on output file $MPMW.ats2fake or $MPMW.ats0fake, to add runID and tranID values.
+    INPUT: via STDIN: $MPMW.ats2fake or $MPMW.ats0fake. 
+    READS: LATATSfake.history
+    SWITCHES (optional): 	 
+	      -track (-t): add IDs for the planned week to the file LATATSfake.history
+    OUTPUT: can be diffed against the weekly ATS text file that is FastCopied to NASA.
+    CRON: not readily suitable for running weekly by cron.
+    REVIEW: not suited - too late

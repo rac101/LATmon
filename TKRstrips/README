@@ -1,0 +1,15 @@
+here is where we keep track of Fermi LAT TKR dead strips/channels in the offline LAT Calibration meta-database.
+Reference: https://confluence.slac.stanford.edu/display/SCIGRPS/Info+on+the+calibration+meta-database
+
+> d XML/LAT_BadStrips_*.xml
+
+Steps: 
+use rsync or MacFusion or other means to copy new XML/LAT_Bad_Strips_*.xml to my laptop, 
+to the directory: /Users/rac/Documents/GLAST/ISOC/LATmetrics/TKRstrips/bad/
+
+on the SLAC AFS, the LAT TKR calibration files are in:
+/afs/slac/g/glast/ground/releases/calibrations/TKR/
+
+refine the xml file using:
+egrep '<bad|<tower|Layer|<uniplane |<strip|nStrips|tower>' LAT_BadStrips_27.xml > better.xml
+

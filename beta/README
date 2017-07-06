@@ -1,0 +1,57 @@
+first run the getnav-args.pl scripts for each mission year on the 
+long or xlong batch queues at SLAC, using the batch.YYYY files
+
+then, cleanup the output files using the following one-liner:
+
+noric42:rac> perl -ane 'print $_ if (@F == 9)' < nav.2013 > foo
+
+then, truncate the number of decimal places on Fermi ECI 
+position and velocity vectors using the trunc0.pl script:
+
+./trunc0.pl < nav.YYYY > nav.YYYY-new
+
+then remove duplicated lines using the script delrep.pl:
+
+./delrep.pl < nav.YYYY > nav.YYYY-new
+
+then check for invalid time steps using the script xtimes.pl:
+
+./xtimes.pl < nav.YYYY
+
+then produce a file that is stripped of ":" and "-" in dates, to be suitable to read into IDL
+
+./strip.pl < nav > nav.strip
+
+=========NEW INFO==============
+00.merge multiple input nav files into a single output file, 
+removing duplicates and checking for bad lines
+./mergenav.pl nav.file1 nav.file2 [...nav.fileN] > nav.merged
+
+0. output file (containing truncated vector parameter numbers):
+nav.history
+
+1. check for invalid time steps using xtimes.pl:
+./xtimes.pl < nav.history
+
+result:
+./xtimes.pl: at line 2176, invalid time step from 2008-09-22 14:00:00 1222092000 to 2008-09-22 16:00:00 1222099200
+./xtimes.pl: at line 2712, invalid time step from 2008-10-14 23:00:00 1224025200 to 2008-10-14 23:59:59 1224028799
+./xtimes.pl: at line 2713, invalid time step from 2008-10-14 23:59:59 1224028799 to 2008-10-15 01:00:00 1224032400
+./xtimes.pl: at line 5106, invalid time step from 2009-01-22 17:00:00 1232643600 to 2009-01-22 19:00:02 1232650802
+./xtimes.pl: at line 5107, invalid time step from 2009-01-22 19:00:02 1232650802 to 2009-01-22 22:00:00 1232661600
+./xtimes.pl: at line 5498, invalid time step from 2009-02-08 04:00:00 1234065600 to 2009-02-08 05:59:24 1234072764
+./xtimes.pl: at line 5499, invalid time step from 2009-02-08 05:59:24 1234072764 to 2009-02-08 10:00:00 1234087200
+./xtimes.pl: at line 6257, invalid time step from 2009-03-11 23:00:00 1236812400 to 2009-03-12 01:00:00 1236819600
+./xtimes.pl: at line 29891, invalid time step from 2011-11-21 18:00:00 1321898400 to 2011-11-21 20:00:00 1321905600
+./xtimes.pl: at line 35215, invalid time step from 2012-06-30 15:00:00 1341068400 to 2012-06-30 23:00:00 1341097200
+./xtimes.pl: at line 35221, invalid time step from 2012-07-01 04:00:00 1341115200 to 2012-07-01 08:00:00 1341129600
+./xtimes.pl: at line 43203, invalid time step from 2013-05-29 21:00:00 1369861200 to 2013-05-29 23:00:00 1369868400
+
+2. bring the file "nav.history" up to date manually:
+./getnav-0args.pl >> nav.history
++++++++alternatively: "getnav-args.pl  start-YYYY-MM-DD num-days" 
+                  or: "getnav-hourargs.pl start-YYYY-MM-DD:HH num-hours"
+                  or: "getnav-2args.pl start-YYYY-MM-DD end-YYYY-MM-DD"
+
+3. bring the file "up to date" (to the day before yesterday) by cron job:
+./beta/getnav-1day.pl >> ./beta/nav.history

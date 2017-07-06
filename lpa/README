@@ -1,0 +1,13 @@
+for LAT data catalog access, see: https://confluence.slac.stanford.edu/display/ds/Linemode-client+find+command
+
+on the SLAC farm, the data catalog digi	files are being	listed in: /nfs/farm/g/glast/u/rac/lpa/
+which is on the U55 drive.
+
+commands: 
+> source listall.digi
+which does: 
+./dcat find \--sort nMetStart \--group DIGI \--display nRun \--display NumberEvents \--display nMetStart \--display nMetStop /Data/Flight/Level1/LPA | s0.pl > digi.all.new
+
+> source listall.ft1
+which does: 
+./dcat find \--sort nMetStart \--group FT1 \--display nRun \--display NumberEvents \--display nMetStart \--display nMetStop /Data/Flight/Level1/LPA | s0.pl > ft1.all.new

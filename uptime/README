@@ -1,0 +1,35 @@
+  Scripts for checking on LAT uptime, copied from ~jana/utils/scripts/
+
+Robert Cameron
+May 2012
+
+Step 1. do "isocops"
+
+Step 2. bsub -q long "./tup.pl >> ./tup.out"
+
+CRON
+=====================
+I could run the script "tup.pl" daily. 
+NOTE: I am required to use the appropriate computer: lnxcron.slac.stanford.edu
+NOTE: I am required to put the task into trscrontab, not crontab, to be able to access AFS,
+and so to setup the ISOC environment, to correctly use MnemRet.py and PktDump.py, etc.
+lnxcron:rac> trscrontab -l
+lnxcron 48 3 * * * source /u/gl/glastops/flightops.sh; /nfs/farm/g/glast/u55/rac/LATmetrics/uptime/tup.pl >> /nfs/farm/g/glast/u55/rac/LATmetrics/uptime/tup.out
+
+====================
+To summarize the LAT uptime, use:
+./addup.pl < tup.out or ./addup.pl < tup.int
+#./atup.pl
+
+To check the time continuity in tup.out: 
+./xup.pl < tup.out
+
+To convert floats to integers in tup.out:
+./inttup.pl < tup.out > tup.int
+
+To convert floats to a precision of 1 decimal place in the file "tup.out"
+./doneup.pl < tup.out > tup.done
+
+To look at uptime in a time sub-range:
+./someup.pl < bit-of-tup.out
+====================

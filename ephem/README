@@ -1,0 +1,2 @@
+MnemRet.py -b '2017-05-18 10:00:00' -e '+1 hour' SGPSBA_LATITUDE SGPSBA_LONGITUDE > mnemret.20170518
+getlatlon.pl < mnemret.20170518 > latlon.20170518
