@@ -1,4 +1,4 @@
-# ignore everything except explicitly included files in the repository
+# ignore everything except explicitly allowed files in the repository
 *
 
 # explicitly allowed files in the repository
