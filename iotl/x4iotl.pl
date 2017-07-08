@@ -23,14 +23,14 @@ $sn = basename($0);
 # path to the FastCopy archive of IOTL reports
 $fcdir = "/nfs/farm/g/glast/u23/ISOC-flight/Archive/fcopy";
 
-# for several recent days' Year/Month/DOY look for recent IOTL "actual" and "expected" reports
+# for several recent days' Year/Month/DOY, look for recent IOTL "actual" and "expected" reports
 # check multiple days in case there was some multi-day report ingest problem
 
 $date = `date -u +"%F (%j) %T UTC"`;
 
 print "$sn: Run Time = $date"; 
 
-foreach $dayold (0..2) { 
+foreach $dayold (0..6) { 
     %h = ();
     %k = ();
     %t = ();
@@ -187,7 +187,6 @@ sub timediff{
     my $min2 = substr($time2, 14, 2);
     my $sec1 = substr($time1, 17, 2);
     my $sec2 = substr($time2, 17, 2);
-
 
 #print "$year1 $month1 $day1\n";
 #print "$hour1\n$min1\n$sec1\n";

@@ -1,9 +1,10 @@
-a new script for an hourly cron job, to check IOTL files delivered to SLAC by FastCopy.
+a script to check IOTL files delivered to SLAC from the MOC.
 
 x4iotl.pl
 
 It is invoked in /u/gl/rac/cron.MP (which is run hourly in cron), using:
 x4iotl.pl >| /afs/slac/www/exp/glast/ops/IOTLcheck.txt
 
-The script checks for incoming IOTL files over the past 3 days, and compares "actual" and "expected" LAT commands
-in the IOTL.
+The script checks for incoming IOTL files over the past few days, 
+and compares "actual" and "expected" LAT commands in found IOTLs. 
+This check should be done before approving a weekly ATS in the TMT.
