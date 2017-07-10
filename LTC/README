@@ -19,7 +19,7 @@ for each VCHP, 3 numbers are written to the line in the output file:
 
 =======NEW INFO===========
 1. check for time gaps in the heater history file:
-./xhtr.pl < htr.history
+./xhtr.py < htr.history
 
 2. to manually update the heater history file:
 ./gethtr-0args.pl >> htr.history
