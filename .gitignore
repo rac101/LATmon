@@ -6,7 +6,7 @@
 !*.py
 !README
 !.gitignore
-cron.*
+!cron.*
 
 # allow the above few files, even in subdirectories
 !*/
@@ -16,3 +16,6 @@ users/rac/LATmetrics/getssr.pl
 planning/obsolete/*
 planning/400/*
 memerr/catchup/*
+cron/*~
+cron/*weekly*
+cron/*daily*

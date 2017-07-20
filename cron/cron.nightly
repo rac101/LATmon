@@ -1,0 +1,20 @@
+### usage: 
+### (runs on lnxcron.slac.stanford.edu)
+### revealed by running command "trscrontab -l" on lnxcron 
+### must be in "isocops" environment to run these perl scripts
+### which is accomplished by running flightops.sh in the cron job
+#
+# lnxcron:rac> trscrontab -l
+#lnxcron 28 2 * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/crontab.nightly
+#
+#
+WDIR=/u/gl/rac/LATmetrics
+$WDIR/TLE/get_tle.pl >> $WDIR/TLE/TLE.txt
+$WDIR/SSR/getssr.pl >> $WDIR/SSR/ssr.history
+$WDIR/uptime/tup.pl >> $WDIR/uptime/tup.out
+$WDIR/triggers/triglist.pl >> $WDIR/triggers/gem.sent
+$WDIR/triggers/jana/getrigs.pl >> $WDIR/triggers/jana/trigrate.jana
+$WDIR/LTC/gethtr-1day.pl >> $WDIR/LTC/htr.history
+$WDIR/memerr/geosaa.pl >> $WDIR/memerr/geosaa.out
+$WDIR/saa/polygon/agepoly.pl $WDIR/saa/polygon/history.new.poly
+#$WDIR/beta/getnav-1day.pl >> $WDIR/beta/nav.history

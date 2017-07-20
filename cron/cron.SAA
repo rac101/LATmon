@@ -1,0 +1,25 @@
+### usage: 
+### (runs on lnxcron.slac.stanford.edu)
+### revealed by running command "trscrontab -l" on lnxcron 
+### must be in "isocops" environment to run these perl scripts
+### which is accomplished by running flightops.sh in the cron job
+#
+# lnxcron:rac> trscrontab -l
+#lnxcron 25 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.SAA
+#lnxcron 30 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.MP
+#lnxcron 47 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.hourly
+#lnxcron 28 2 * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.nightly
+#
+# Fermi SAA: 
+#
+WDIR=/u/gl/rac/LATmetrics/saa
+ODIR=/afs/slac/www/exp/glast/ops
+#
+$WDIR/x4saa.pl >> $WDIR/output/saax.txt
+#rm $WDIR/output/SAAcheck.txt
+$WDIR/output/reversefile.pl < $WDIR/output/saax.txt >| $WDIR/output/SAAcheck.txt
+#rm $ODIR/SAAcheck.txt
+\cp $WDIR/output/SAAcheck.txt $ODIR
+#
+#rm $ODIR/SAAcheck.latest
+$WDIR/l8stsaax1-bw.pl >| $ODIR/SAAcheck.latest
