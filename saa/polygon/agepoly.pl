@@ -21,8 +21,12 @@
 # output to STDOUT = ARCHIVE will be
 # YYYY MM DD DOY HH MM SS.ssssss unix-time MET polygon LAT and LONG values in alphabetical order of mnemonic
 
+# expect to run this script once per day
+# report to STDERR when there is an update to the polygon
+# also, report to STDERR only one day per week. Do NOT report the polygon age every day.
+
 # Robert Cameron
-# May 2017
+# July 2017
 
 # usage: ./agepoly.pl history.new.poly
 
@@ -38,12 +42,13 @@ open (HF, $ARGV[0]) or die "$0: Cannot open polygon History File\n";
 chomp $lines[-1];
 ($junk,$junk,$oldutc,$oldpoly) = split(' ',$lines[-1],4);
 
-# get current polygon, from last Thursday
+# get current polygon
 
-$t = `date -dlast-thursday +"%F 07:00:00"`;
+$t = `date -dyesterday +"%F 00:25:00=%u"`;
 chomp $t;
+($date,$dow) = split("=",$t);
 
-$c = "MnemRet.py -b '-25 minutes' -e '$t' --expr 'VSGSAA1PLONG[01][0-9]' --expr 'VSGSAA1PLAT[01][0-9]' --csv /dev/stdout";
+$c = "MnemRet.py -b '-25 minutes' -e '$date' --expr 'VSGSAA1PLONG[01][0-9]' --expr 'VSGSAA1PLAT[01][0-9]' --csv /dev/stdout";
 
 ($hdr,@res) = `$c`;
 
@@ -66,7 +71,7 @@ foreach (@res) {
     $ddays = sprintf "%.1f",($newutc - $oldutc)/86400.0;
     $line = join " ",@sval;
     $newpoly = join " ",@sval[2..$#sval];
-    if ($newpoly eq $oldpoly) {
+    if ($newpoly eq $oldpoly and $dow == 4) {
 	print STDERR "$sn: LAT SAA polygon is $ddays days old at $newdate\n";
     }
     else {
