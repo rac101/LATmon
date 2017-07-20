@@ -6,6 +6,7 @@
 !*.py
 !README
 !.gitignore
+cron.*
 
 # allow the above few files, even in subdirectories
 !*/
