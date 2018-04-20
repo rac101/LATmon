@@ -24,7 +24,8 @@ Calculates appropriate MW from run date.
     SWITCHES (all optional)
     	     -p ("plan")  # flag: 1 = "Planned", 0 = "ATSreview" for type of fake MPV product produced
              -f ("force") # flag: 1 = run to completion even if dates are wrong or outfile exists
-             -o ("ofile") # flag: 1 = send output to a file with standard name starting with MW: either "MWplan.fake" or "MWrev.fake"
+             -o ("ofile") # flag: 1 = send output to a file with standard name starting with MW
+             -n=NNN ("week=i") # integer value for argument that sets the Mission Week to be planned
     OUTPUT: file can be diffed against a .csv copy of plan review product from the MP webviewer.
     CRON: Suitable for running weekly by cron.
     REVIEW: suited - baseline product is available on the "Planned" or "ATS Review" tab in the MP webviewer. 

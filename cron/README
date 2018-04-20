@@ -13,8 +13,8 @@ lnxcron 28 2 * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.nig
 
 The following are obsolete:
 cron.daily
+cron.weekly
 crontab.SAA
 crontab.daily
 crontab.hourly
 crontab.nightly
-

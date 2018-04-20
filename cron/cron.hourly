@@ -11,7 +11,7 @@
 #cd /u/gl/rac/LATmetrics
 #./beta/getnav-hour.pl >> ./beta/nav.history
 #
-export PERL5LIB=/u/gl/rac/perl5/share/perl5/
+export PERL5LIB=/u/gl/rac/perl5/share/perl5/    # needed for Try Perl module
 WDIR=/u/gl/rac/LATmetrics
 $WDIR/beta/getnav-hour.pl >> $WDIR/beta/nav.history
 $WDIR/cron/watch.pl

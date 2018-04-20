@@ -2,7 +2,7 @@
 
 # report on missing days in the LAT memory error archive file
 
-#Usage: > ./archeck.pl < geosaa.out
+#Usage: > ./archeck.pl < memerr.history
 
 #input format
 #EPU1: 2012-04-22 18:21:41.784301 (1335118901.784301)  Address:   62151696 (0x03b45c10)  Type: 4 (Correctable multi-bit error) -25.944944 -23.729332 1

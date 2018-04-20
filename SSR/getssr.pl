@@ -19,41 +19,65 @@
 
 # first, find the most recent good results in ssr.history
 
-$dir = "/u/gl/rac/LATmetrics/SSR";
+use warnings;
+#use File::Basename;
+use Try::Tiny;
 
-@tail = ();
-$nlines = 0;
-until ($tail[0] and $tail[0] =~ /^ Daily Ave/) {
-    $nlines++;
-    @tail = `tail -$nlines $dir/ssr.history`;
+#$sn = basename($0);
+
+use strict 'subs';
+use strict 'refs';
+
+try {
+    local $SIG{ALRM} = sub { die "alarm\n" };
+    alarm 300;
+    main();
+    alarm 10;
 }
-if ($nlines > 1) { print STDERR "$0: needed to tail $nlines lines in ssr.history\n" };
-@f = split(' ',$tail[0]);
-$tdate = sprintf "%04i-%02i-%02i",@f[8,9,10];
-if ($f[11] > 20) { $tdate = `date --date="$tdate + 1 day" +"%F"` };
-chomp $tdate;
-$tdate_s = `date --date="$tdate" +"%s"`;
+catch {
+    die $_ unless $_ eq "alarm\n";
+    print STDERR "$0: timed out\n";
+}
+finally {
+#    print "done\n";
+};
 
-$today = `date +"%F"`;
-chomp $today;
-$today_s = `date --date="$today" +"%s"`;
+sub main {
+    $dir = "/u/gl/rac/LATmetrics/SSR";
 
-$deld = ($today_s - $tdate_s)/86400;
-if ($deld > 1) { print STDERR "$0: processing $deld days between $tdate and $today\n" };
+    @tail = ();
+    $nlines = 0;
+    until ($tail[0] and $tail[0] =~ /^ Daily Ave/) {
+	$nlines++;
+	@tail = `tail -$nlines $dir/ssr.history`;
+    }
+    if ($nlines > 1) { print STDERR "$0: needed to tail $nlines lines in ssr.history\n" };
+    @f = split(' ',$tail[0]);
+    $ssrdate = sprintf "%04i-%02i-%02i",@f[8,9,10];
+    if ($f[11] > 20) { $startdate = `date --date="$ssrdate + 1 day" +"%F"` };
+    chomp $startdate;
+    $startdate_s = `date --date="$startdate" +"%s"`;
+    
+    $day = `date --date="today 00:00:00" +"%F %s"`;
+    ($today,$today_s) = split(" ",$day);
 
-$cmd = "$dir/SsrUsage.py -b '$tdate 00:00:00' -e '$today 00:00:00' -d";
+    $deld = ($today_s - $startdate_s)/86400;
+    if ($deld > 1) { print STDERR "$0: processing $deld days from $startdate to $today\n" };
+    
+    $cmd = "$dir/SsrUsage.py -b '$startdate 00:00:00' -e '$today 00:00:00' -d";
 #print STDERR "$0: About to execute the command: $cmd\n";
-@ssr = `$cmd`;
-
+    @ssr = `$cmd`;
+    
 # ensure only good results go into ssr.history
-
-foreach (@ssr) { 
-    if (/WARNING/) { print $_; next };
-    next unless (/Daily Ave/);
-    s/[-:\/\(\)]/ /g;
-    @f = split;
-    last if (abs(86400-$f[16]) > 30);
-    $hms = $f[11]*3600+$f[12]*60+$f[13];
-    last if ($hms > 60 and abs(86400-$hms) > 60);
-    print $_;
-}
+    
+    foreach (@ssr) { 
+	if (/WARNING/) { print $_; next };
+	next unless (/Daily Ave/);
+	s/[-:\/\(\)]/ /g;
+	@f = split;
+	last if (abs(86400-$f[16]) > 30);
+	$hms = $f[11]*3600+$f[12]*60+$f[13];
+	last if ($hms > 60 and abs(86400-$hms) > 60);
+	print $_;
+    }
+}  # end of main sub

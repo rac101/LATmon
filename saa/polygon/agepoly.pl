@@ -4,7 +4,7 @@
 # do this weekly, by cron, to check if FOT is ~monthly doing an update
 
 # here is the format of the MnemRet.py command:
-# MnemRet.py -b '-1 hour' -e '2017-04-19 00:00:00' --expr 'VSGSAA1PLONG[01][0-9]' --expr 'VSGSAA1PLAT[01][0-9]' --csv /dev/stdout
+# MnemRet.py -e '+1 hour' -b '2017-04-19 00:00:00' --expr 'VSGSAA1PLONG[01][0-9]' --expr 'VSGSAA1PLAT[01][0-9]' --csv /dev/stdout
 
 # which produces the output:
 #TIME,TSTAMP,VSGSAA1PLONG11,VSGSAA1PLONG10,VSGSAA1PLONG12,VSGSAA1PLONG06,VSGSAA1PLONG05,VSGSAA1PLONG02,
@@ -31,54 +31,88 @@
 # usage: ./agepoly.pl history.new.poly
 
 use File::Basename;
+use Try::Tiny;
+
+use strict 'subs';
+use strict 'refs';
+
 $sn = basename($0);
+
+try {
+    local $SIG{ALRM} = sub { die "alarm\n" };
+    alarm 90;
+    main();
+    alarm 10;
+}
+catch {
+    die $_ unless $_ eq "alarm\n";
+    print STDERR "$0: Try timed out\n";
+}
+finally {
+#    print "done\n";
+};
+
+#####################################
+sub main {
+
+#use Digest::MD5 qw(md5);
+
+    $histfile = $ARGV[0];
 
 # get previous polygon
 
-open (HF, $ARGV[0]) or die "$0: Cannot open polygon History File\n";
+    open (HF0, $histfile) or die "$sn: Cannot open SAA polygon history file for reading\n";
+    @lines = <HF0>;
+    print STDERR "$0: ",scalar(@lines)," lines read from SAA polygon history file\n";
+    close (HF0);
 
-@lines = <HF>;
+    chomp $lines[-1];
+    ($junk,$junk,$oldutc,$oldpoly) = split(' ',$lines[-1],4);
 
-chomp $lines[-1];
-($junk,$junk,$oldutc,$oldpoly) = split(' ',$lines[-1],4);
+# re-open the history file, to append to it
+    open (HF, ">>$histfile") or die "$sn: Cannot open SAA polygon history file for appending\n";
 
 # get current polygon
+    
+    $t = `date -dyesterday +"%F 00:00:00=%u"`;
+    chomp $t;
+    ($date,$dow) = split("=",$t);
+    $dow = 0;
 
-$t = `date -dyesterday +"%F 00:25:00=%u"`;
-chomp $t;
-($date,$dow) = split("=",$t);
+    $c = "MnemRet.py -e '+20 minutes' -b '$date' --expr 'VSGSAA1PLONG[01][0-9]' --expr 'VSGSAA1PLAT[01][0-9]' --csv /dev/stdout";
 
-$c = "MnemRet.py -b '-25 minutes' -e '$date' --expr 'VSGSAA1PLONG[01][0-9]' --expr 'VSGSAA1PLAT[01][0-9]' --csv /dev/stdout";
-
-($hdr,@res) = `$c`;
-
-chomp $hdr;
-die "$0: first line is not HEADER line\n" unless ($hdr =~ /^TIME/);
-@var = split(',',$hdr);
-@idx = sort { $var[$a] cmp $var[$b] } 0 .. $#var;
+    ($hdr,@res) = `$c`;
+    chomp $hdr;
+    die "$sn: first line is not HEADER line\n" unless ($hdr =~ /^TIME/);
+    @var = split(',',$hdr);
+    @idx = sort { $var[$a] cmp $var[$b] } 0 .. $#var;
 
 # read in the data one line at a time
 # if the new polygon matches the old polygon, then report the time difference to STDERR
 # if the new polygon does not match the old, then report so and add the new line to the history.new file
 
-foreach (@res) {
-    next unless (/20/);
-    chomp;
-    @val = split(',',$_);
-    @sval = @val[@idx];
-    $newdate = $sval[0];
-    $newutc = $sval[1];
-    $ddays = sprintf "%.1f",($newutc - $oldutc)/86400.0;
-    $line = join " ",@sval;
-    $newpoly = join " ",@sval[2..$#sval];
-    if ($newpoly eq $oldpoly and $dow == 4) {
+    foreach (@res) {
+	next unless (/20/);
+	chomp;
+	@val = split(',',$_);
+	@sval = @val[@idx];
+	$newdate = $sval[0];
+	$newutc = $sval[1];
+	$ddays = sprintf "%.1f",($newutc - $oldutc)/86400.0;
+	$line = join " ",@sval;
+	$newpoly = join " ",@sval[2..$#sval];
 	print STDERR "$sn: LAT SAA polygon is $ddays days old at $newdate\n";
-    }
-    else {
-	print HF "$line\n";
-	print STDERR "$sn: new LAT SAA polygon added to history file at $newdate\n";
-	$oldpoly = $newpoly;
-	$oldutc = $newutc;
-    }
-}
-close (HF);
+	if ($newpoly ne $oldpoly) {
+	    print HF "$line\n";
+	    print STDERR "$sn: new LAT SAA polygon added to history file at $newdate\n";
+#	$oldmd5 = md5($oldpoly);
+#	$newmd5 = md5($newpoly);
+#	$lold = length($oldpoly);
+#	$lnew = length($newpoly);
+#	print STDERR "$oldpoly\n$newpoly\n $lold $lnew $oldmd5 $newmd5\n";
+	    $oldpoly = $newpoly;
+	    $oldutc = $newutc;
+	}  # end of if statement
+    }  # end of @res for loop
+    close (HF);
+}  # end of main sub

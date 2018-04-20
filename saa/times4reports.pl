@@ -5,7 +5,7 @@
 # Robert Cameron
 # July 2016
 
-# usage: ./time4reports.pl < SAA.reports
+# usage: ./times4reports.pl < SAA.reports
 
 use Time::Local;
 

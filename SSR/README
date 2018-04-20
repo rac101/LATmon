@@ -5,11 +5,14 @@ login to isoc-ops1
 > $ u55 (cd to /nfs/farm/g/glast/u55/rac , i.e. /a/sulky55/g.glast.u55/rac/SSR)
 > $ cd SSR (cd to SSR sub-directory)
 > $ isocops (setup isoc environment, aliased to source /u/gl/glastops/flightops.csh)
-> $ ./SsrUsage.py -b '-15 days' -e '2012-06-30 00:00:00' -d >> ssr.history
+> $ ./SsrUsage.py -b '-15 days' -e '2012-06-30 00:00:00' -d  | perl -ape 's/[-:\/\(\)]/ /g' >> ssr.history
 
 Then for adding to the excel spreadsheet:
 
-> tail -20 ssr.history | perl -ane 'print "$F[19]\n"'
+tail -20 ssr.history | perl -ane 'print "$F[19]\n"'
+tail -20 ssr.history | perl -ane 'print "$F[-3]\n"'
+tail -20 ssr.history | perl -ane 'print "$F[-6] $F[-3]\n"'
+tail -20 ssr.history | perl -ane 'print "$F[-6]\n"'
 
 ==================
 2012 June
@@ -21,4 +24,4 @@ using the perl script "getssr.pl", which invokes SsrUsage.py
 See ~/cron.nightly for timing of running getssr.pl each day.
 
 Check time continuity of history of daily SSR Usage
-> $ ./xssr.py < ssr.history
+./xssr.py < ssr.history

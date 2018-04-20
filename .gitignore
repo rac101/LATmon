@@ -4,6 +4,7 @@
 # explicitly allowed files in the repository
 !*.pl
 !*.py
+!*.sh
 !README
 !.gitignore
 !cron.*
@@ -19,3 +20,6 @@ memerr/catchup/*
 cron/*~
 cron/*weekly*
 cron/*daily*
+memerr/oldstuff/*
+saa/polygon/obsolete/*
+saa/polygon/yearly/*

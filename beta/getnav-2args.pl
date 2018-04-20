@@ -30,7 +30,7 @@ $date0 = $ARGV[0];
 $date0s = `date --date="$date0" +"%s"`;
 $date1 = $ARGV[1];
 $date1s = `date --date="$date1" +"%s"`;
-$numdays = ($date1s - $date0s)/86400.0;
+$numdays = ($date1s - $date0s)/86400.0 + 1;
 print STDERR "$0: running for $numdays days\n";
 
 for $d (0..$numdays) {

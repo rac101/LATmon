@@ -21,5 +21,5 @@ $WDIR/output/reversefile.pl < $WDIR/output/saax.txt >| $WDIR/output/SAAcheck.txt
 #rm $ODIR/SAAcheck.txt
 \cp $WDIR/output/SAAcheck.txt $ODIR
 #
-#rm $ODIR/SAAcheck.latest
-$WDIR/l8stsaax1-bw.pl >| $ODIR/SAAcheck.latest
+$WDIR/xl8stsaa.pl >| $ODIR/SAAcheck.latest
+\tac $WDIR/SAA.reports >| $ODIR/SAAreports.txt

@@ -1,0 +1,11 @@
+Sasha reported on 2017 July 21:
+
+After I corrected 
+    set_env.sh 
+the script 
+    bootstrapTrend_cgc.sh 
+works perfectly fine and I processed all data for last 3 month (April-June 2017).
+But now I get similar problem when running second part of the trending script
+/afs/slac/g/glast/users/chehtman/calibGenCAL_analysis/cal_mon/
+    runtrend_sanchez.sh 512348800 512953600 2017-03-30
+

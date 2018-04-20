@@ -7,26 +7,25 @@ to track the LAT daily event rate, do the following:
 rac> isocops
 
 1. check the dates to be used with the script buildlist.pl:
-rac> ./buildlist.pl
+./buildlist.pl
 37 lines read from gem.sent : the last valid date is 2011-06-06
 MnemRet.py -b '2011-06-07 13:27:00' -e '+45 seconds' LHKGEMSENT | sample.pl
 MnemRet.py -b '2011-06-08 13:27:00' -e '+45 seconds' LHKGEMSENT | sample.pl
 MnemRet.py -b '2011-06-09 13:27:00' -e '+45 seconds' LHKGEMSENT | sample.pl
 
 2. if things look ok from step 1, update the file gem.sent 
-rac> ./triglist.pl >> gem.sent
+./triglist.pl >> gem.sent
 
 3. to confirm that "gem.sent" is up to date, re-run buildlist.pl
-rac> ./buildlist.pl
+./buildlist.pl
 40 lines read from gem.sent : the last valid date is 2011-06-09
 gem.sent is up to date
 
 4. to get the one column of interest for copy and paste to the spreadsheet, do:
-
-rac> tail -20 gem.sent |  perl -ane 'print "$F[4]\n"'
+tail -20 gem.sent |  perl -ane 'print "$F[4]\n"'
 
 4. to check the time continuity of history of daily GEM SENT count, use xsent.py;
-# usage: ./xsent.py < gem.sent
+./xgems.py < gem.sent
 
 ===============================================================
 HOT NEWS for 2012: 
@@ -52,5 +51,5 @@ here's what you have to do when the LAT is rebooted for any reason
 
 FYI, here is a handy way to get the "seconds from 1970" timestamp 
 for a UTC date/time for the lines returned by MnemRet.py
-rac> date -u -d '2010-09-12 13:27:22' +%s
+date -u -d '2010-09-12 13:27:22' +%s
 1284298042

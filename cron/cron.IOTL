@@ -1,0 +1,13 @@
+### usage: 
+### (runs on lnxcron.slac.stanford.edu)
+### revealed by running command "trscrontab -l"
+#
+# lnxcron:rac> trscrontab -l
+#lnxcron 4,14,24,34,44,54 * * * * source /u/gl/rac/cron.IOTL
+#
+export PERL5LIB=/u/gl/rac/perl5/share/perl5/   # needed for Try Perl module
+#PDIR=/u/gl/rac/LATmetrics
+#
+#  IOTL file checks:
+#
+/u/gl/rac/LATmetrics/iotl/x4iotl.pl >| /afs/slac/www/exp/glast/ops/IOTLcheck.txt

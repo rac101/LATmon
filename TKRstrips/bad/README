@@ -1,0 +1,14 @@
+1. to get a summary per layer of the dead chans, and dead channel total per tower and per LAT:
+./xxmlTKR.pl XML/LAT_BadStrips_NN.xml > sum.NN
+
+2. transcribe the latest bad strips summary from each line of the file "count" updated in step 1, 
+into the ISOC Drive Google spreadsheet: "tkr-stripmask-trending.xlsx", into the worksheet called "Ground-BadStrips"
+
+3. ensure that difference counts are calculated in columns V to AL in the new row you just added in step 2.
+
+4. copy the new row's number into cell A3 of the spreadsheet.  
+The 4x4 grid of the bad strips per TKR tower is then automatically made in the spreadsheet, 
+and can be copied to your powerpoint presentation.
+
+5. to identify the layers having more than (say) 100 bad strips, use:
+./xworst.pl < sum.NN

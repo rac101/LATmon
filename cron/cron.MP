@@ -15,21 +15,15 @@
 export PERL5LIB=/u/gl/rac/perl5/share/perl5/
 PDIR=/u/gl/rac/LATmetrics/planning
 $PDIR/filistEphem.pl
-$PDIR/filistSAA.pl
+#$PDIR/filistSAA.pl
 $PDIR/fakeATS.pl -o -p
 $PDIR/fakeATS.pl -o
-#$PDIR/fakeATSReview-of.pl
-#$PDIR/fakePlanned-of.pl
 $PDIR/makeATS.pl -o -g -t
 $PDIR/makeATS.pl -o
 $PDIR/moveMPMWfiles.pl
 #
-#  IOTL file checks:
-#
-$PDIR/../iotl/x4iotl.pl >| /afs/slac/www/exp/glast/ops/IOTLcheck.txt
-#
 # TDRSS contact schedule updating: 
 #
-MPDIR=/u/gl/rac/LATmetrics/planning
-$MPDIR/getTDRSS-try.pl > $MPDIR/TDRSSschedule.txt
-$MPDIR/getTDRSS-try.pl >| /u/gl/rac/public_html/transfer/mics.txt
+$PDIR/getTDRSS-try.pl > $PDIR/TDRSSschedule.txt
+\cp $PDIR/TDRSSschedule.txt /u/gl/rac/public_html/transfer/mics.txt
+#$PDIR/getTDRSS-try.pl >| /u/gl/rac/public_html/transfer/mics.txt

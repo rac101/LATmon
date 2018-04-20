@@ -22,7 +22,7 @@ To summarize the LAT uptime, use:
 #./atup.pl
 
 To check the time continuity in tup.out: 
-./xup.pl < tup.out
+./xtup.py < tup.out
 
 To convert floats to integers in tup.out:
 ./inttup.pl < tup.out > tup.int

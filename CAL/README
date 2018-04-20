@@ -27,5 +27,5 @@ mv runall.output runall.output.old
 ls -1 ./GMU-CAL-XML/*proton_cal*PD.xml | allprogain.pl > runall.output
 diff runall.output runall.output.old
 
-2. add the new lines to the spreadsheet on my laptop: MPD.xlsx
-and redo the plots in the spreadsheet
+2. add the new lines to the Google Doc spreadsheet in the ISOC Team Drive: CAL-ground-calibration
+and redo the plots in the spreadsheet. These plots are shown in the LAT report for Fermi Quarterly Reviews, and at LAT Collaboration meetings.

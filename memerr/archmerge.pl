@@ -18,7 +18,9 @@
 #    push @dom,$dom[$_-1]+$n;
 #}
 
-open (AF,'geosaa.out') or die "$0: Cannot open archive data file\n";
+$archive = "memerr.history"; 
+
+open (AF,$archive) or die "$0: Cannot open archive data file: $archive\n";
 while (<AF>) {
     next unless (/U/);
     @f = split; 

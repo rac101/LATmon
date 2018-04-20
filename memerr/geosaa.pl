@@ -27,52 +27,75 @@
 
 # usage: ./geosaa.pl >> geosaa.out
 
-$mnems = "LCMMEMCPUNODE LCMMEMLOG0TYP LCMMEMLOG0ADD LCMMEMLOG1TYP LCMMEMLOG1ADD LCMMEMLOG2TYP LCMMEMLOG2ADD LCMMEMLOG3TYP LCMMEMLOG3ADD";
+use Try::Tiny;
+
+use strict 'subs';
+use strict 'refs';
+
+try {
+    local $SIG{ALRM} = sub { die "alarm\n" };
+    alarm 200;
+    main();
+    alarm 10;
+}
+catch {
+    die $_ unless $_ eq "alarm\n";
+    print STDERR "$0: Try timed out\n";
+}
+finally {
+#    print "done\n";
+};
+
+#####################################
+sub main {
+
+    $mnems = "LCMMEMCPUNODE LCMMEMLOG0TYP LCMMEMLOG0ADD LCMMEMLOG1TYP LCMMEMLOG1ADD LCMMEMLOG2TYP LCMMEMLOG2ADD LCMMEMLOG3TYP LCMMEMLOG3ADD";
 
 # first, find the most recent results in "geosaa.out"
 
-$wdir = "/u/gl/rac/LATmetrics/memerr";
-@tail = `tail $wdir/geosaa.out`;
-$tail = '';
-until ($tail =~ /Address:/)  { $tail = pop(@tail) };
-@f = split(' ',$tail);
-$startdate = `date --date="$f[1] + 1 day" +"%F 00:00:00"`;
-chop $startdate;
+    $wdir = "/u/gl/rac/LATmetrics/memerr";
+    @tail = `tail $wdir/geosaa.out`;
+    $tail = '';
+    until ($tail =~ /Address:/)  { $tail = pop(@tail) };
+    @f = split(' ',$tail);
+    $startdate = `date --date="$f[1] + 1 day" +"%F 00:00:00"`;
+    chop $startdate;
 
 #`source /u/gl/glastops/flightops.sh`;
-$cmd = 'date --date="-3 days" +"%F 00:00:00"';
-$day = `$cmd`;
-chop $day;
+    $cmd = 'date --date="-3 days" +"%F 00:00:00"';
+    $day = `$cmd`;
+    chop $day;
 
-# check day range
-$checkdate = `date --date="$startdate + 1 day" +"%F 00:00:00"`;
-chop $checkdate;
-if ($checkdate ne $day) { print STDERR "$0: Working on day range $startdate to $day\n" };
+# check day range 
+    $checkdate = `date --date="$startdate + 1 day" +"%F 00:00:00"`;
+    chop $checkdate;
+    if ($checkdate ne $day) { print STDERR "$0: Working on day range $startdate to $day\n" };
 
 #$cmd = "PktDump.py --apid 718 -b '-1 days' -e '$day'";
-$cmd = "MnemRet.py -b '$startdate' -e '$day' $mnems | $wdir/make_pretty.py";
+    $cmd = "MnemRet.py -b '$startdate' -e '$day' $mnems | $wdir/make_pretty.py";
 #$cmd = "MnemRet.py -b '2012-08-11 10:00:00' -e '+2 day' $mnems | $wdir/make_pretty.py";
 #print STDERR "$0: About to execute the command: $cmd<<<<<<\n";
-@merr = `$cmd`;
+    @merr = `$cmd`;
 #print STDERR "$0: the following memory errors were found:\n",@merr;
 
-foreach (@merr) { 
-    chomp;
-    $err = $_;
-    @fld = split;
-    $cmd = "MnemRet.py -b '-1 seconds' -e '$fld[1] $fld[2]' SGPSBA_LONGITUDE SGPSBA_LATITUDE SACFLAGLATINSAA";
+    foreach (@merr) { 
+	chomp;
+	$err = $_;
+	@fld = split;
+	$cmd = "MnemRet.py -b '-1 seconds' -e '$fld[1] $fld[2]' SGPSBA_LONGITUDE SGPSBA_LATITUDE SACFLAGLATINSAA";
 #    print STDERR "$0: About to execute the command: $cmd<<<<<<\n";
-    @loc = `$cmd`;
+	@loc = `$cmd`;
 #    print STDERR "$0: The MnemRet.py result is: \n",@loc;
-    print $err;
-    foreach (keys(%hash)) { $hash{$_} = -9999 };
-    if ($loc[4] =~ "VAL" || $loc[5] =~ "VAL" || $loc[6] =~ "VAL") {
-	foreach (@loc) {
-	    next unless /VAL/;
-	    @val = split;
-	    $hash{$val[4]} = $val[5];
+	print $err;
+	foreach (keys(%hash)) { $hash{$_} = -9999 };
+	if ($loc[4] =~ "VAL" || $loc[5] =~ "VAL" || $loc[6] =~ "VAL") {
+	    foreach (@loc) {
+		next unless /VAL/;
+		@val = split;
+		$hash{$val[4]} = $val[5];
+	    }
 	}
-    }
-    print " $hash{SGPSBA_LONGITUDE} $hash{SGPSBA_LATITUDE} $hash{SACFLAGLATINSAA}\n";
-}
-print "\n";
+	print " $hash{SGPSBA_LONGITUDE} $hash{SGPSBA_LATITUDE} $hash{SACFLAGLATINSAA}\n";
+    }  # end of memory errors loop
+    print "\n";
+}  # end of main sub 

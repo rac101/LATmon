@@ -6,33 +6,38 @@ May 2012
 NOTE: /Users/rac/Documents/GLAST/ISOC/LATmetrics/memerr is the area on my Mac where I make 
       the geographic plots of memory error locations for LAT quarterly trending reports
 
-The file "geosaa.out" contains a list of all LAT memory errors since the start of the science mission.
+The file "memerr.history" contains a list of all LAT memory errors since the start of the science mission.
 Search for memory errors using "PktDump.py --apid 718" has been extended back into L&EO to about 2008-07-22, 
 without finding any memory errors earlier than 2008-08-02 14:55:25.919560.
 
-Geo coordinates and SAA in/out are attached for all memory errors.
-The file stays 3 days in the past, to allow plenty of time for the MOC to deliver all LAT data to SLAC.
+Geo coordinates (Latitude,Longitude) and SAA in/out flag-bit are attached for all memory errors.
+The file stays 2+ days in the past, to allow plenty of time for the MOC to deliver all LAT data to SLAC.
 
-Running by cron: geosaa.pl >> geosaa.out
+Running by cron: getmemerr.pl >> memerr.history (obsolete: geosaa.pl >> geosaa.out)
 ================
-I run the script "geosaa.pl" daily.
+I run the script "getmemerr.pl" daily.
 to keep up with the daily memory errors.
 NOTE: I am required to use the appropriate computer: lnxcron.slac.stanford.edu
 NOTE: I am required to put the task into trscrontab, not crontab, to be able to access AFS,
 and so to setup the ISOC environment, to correctly use MnemRet.py and PktDump.py, etc.
 lnxcron:rac> trscrontab -l
-lnxcron 8 3 * * * source /u/gl/glastops/flightops.sh; /nfs/farm/g/glast/u55/rac/LATmetrics/memerr/geosaa.pl >> /nfs/farm/g/glast/u55/rac/LATmetrics/memerr/geosaa.out
+lnxcron 8 3 * * * source /u/gl/glastops/flightops.sh; /nfs/farm/g/glast/u55/rac/LATmetrics/memerr/getmemerr.pl >> /nfs/farm/g/glast/u55/rac/LATmetrics/memerr/memerr.history
 
-key commands run in the script geosaa.pl are:
+key commands run in the script getmemerr.pl are:
 PktDump.py --apid 718 -b '-1 days' -e '2012-04-19 00:00:00'
 MnemRet.py -b '-1 seconds' -e '2012-04-19 00:00:00' SGPSBA_LONGITUDE SGPSBA_LATITUDE SACFLAGLATINSAA
 
 Tabulating total memory errors:
 ===============================
-./counts.pl < geosaa.out
-./rate.pl < geosaa.out - tabulate error totals (single, multi, total) per 1 million and 10 million seconds of MET
-./xmemerr.py < geosaa.out - check for gaps etc in geosaa.out
+./counts.pl < memerr.history
+./rate.pl < memerr.history - tabulate error totals (single, multi, total) per 1 million and 10 million seconds of MET
+./xmemerr.py < memerr.history - check for gaps etc in the memerr.history file
 
+Plotting memory errors on a map of the Earth: 
+============================================
+Use the Python notebook: memerr-qt.ipynb
+
+******BELOW is OBSOLETE******** 
 Quarterly plot of errors inside the SAA: 
 ========================================
 getqdat.pl YYYY Q > output_file

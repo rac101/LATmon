@@ -6,6 +6,16 @@ MnemRet.py -b '-20 minutes' -e '2008-06-19 07:00:00' --expr 'VSGSAA[12]PLONG[01]
 MnemRet.py -b '-20 minutes' -e '2008-06-19 07:00:00' --expr 'VSGSAA1PLONG[01][0-9]' --expr 'VSGSAA1PLAT[01][0-9]' --csv /dev/stdout | xpoly.pl >> history1.poly
 
 ===================
+history.new.poly = History file for on-board LAT SAA polygon updates
+
+To check/add to the new/unique history file by cron
+# with isocops setup first, can be used in a crontab, at almost any time:
+./agepoly.pl history.new.poly
+
+To check the time continuity of the history file: 
+./xxpoly.pl < history.new.poly
+
+===================
 OBSOLETE: 
 xpoly.pl
 
@@ -17,12 +27,3 @@ To add to the full history file by cron:
 > ./getpoly.pl >> history1.poly      # with isocops setup first, can be used in a crontab, at almost any time
 
 > ./daily-catchup-xpoly.pl >> daily.history.new.poly
-
-===================
-History file for on-board LAT SAA polygon updates: history.new.poly
-
-To check/add to the new/unique history file by cron: 
-> ./agepoly.pl >> history.new.poly      # with isocops setup first, can be used in a crontab, at almost any time
-
-To check the time continuity of the history file: 
-> ./xxpoly.pl < history.new.poly

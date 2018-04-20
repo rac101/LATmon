@@ -2,7 +2,7 @@ This is the area where numbers are generated for the "Trigger Rate Daily" worksh
 where the recent plot of daily trigger rate versus date is made (starting from 2012 January 1).
 
 NOTE: Jana uses her python script with the -nocreep option in this way:
-TriggerRate.py -b '-12 days' -e '2012-05-29 00:00:00' -d -n >> trigrate.jana
+TriggerRate.py -b '-12 days' -e '2012-05-29 00:00:00' -d -n | perl -ape 's/[-:]/ /g; s/\/day//g; s/[\(\)]//g; s/kHz//' >> trigrate.jana
 
 Which is run daily by cron job (trscrontab on lnxcron.slac.stanford.edu)  
 using the perl script "getrigs.pl" as in:

@@ -19,9 +19,10 @@ use File::Basename;
 $sn = basename($0);
 
 my $ofile = 0;
-GetOptions ("plan"  => \$plan,  # flag: 1 = "Planned", 0 = "ATSreview" for type of fake MPV product produced
-            "force" => \$force, # flag: 1 = run to completion even if dates are wrong or outfile exists
-            "ofile" => \$ofile) # flag: 1 = send output to a file with standard name starting with MW
+GetOptions ("plan"   => \$plan,  # flag: 1 = "Planned", 0 = "ATSreview" for type of fake MPV product produced
+            "force"  => \$force, # flag: 1 = run to completion even if dates are wrong or outfile exists
+            "ofile"  => \$ofile, # flag: 1 = send output to a file with standard name starting with MW
+            "week=i" => \$week)  # integer value for argument sets the Mission Week to be planned
             or die("$sn: Error in command line arguments\n");
 
 $mproot = "/u/gl/rac/LATmetrics/planning";
@@ -48,6 +49,14 @@ $plandate = `date -u --date="+$ddays days" +"%F %Y DOY %j"`;
 $ldp = $daycount{$py} + $pdoy;
 $ld0 = $daycount{2008} + 150; # mission week 0 = 2008-5-29, 2008 DOY 150
 $mpmw = ($ldp - $ld0)/7;
+
+# override automatic MW selection if a command line argument value is provided
+if ($week) {
+    $mpmw = $week;
+    $ldp = $mpmw*7 + $ld0;
+    $ddays = $ldp - $ldnow;
+    $plandate = `date -u --date="+$ddays days" +"%F %Y DOY %j"`;
+}
 
 # find the latest GLAST ephemeris filename and path, at the end of the file $mproot/EPHEM.files
 $ephemfile = `tail -1 $mproot/EPHEM.files`;
@@ -90,13 +99,13 @@ if ($ofile) {
     $ofsuccess = open( OF , '>', $outfile );
 }
 *OF = STDOUT unless $ofsuccess;
-print STDERR "$sn: output going to $outfile\n" if ($ofsuccess);
+print STDERR "\n$sn: output going to $outfile\n" if ($ofsuccess);
 
 ($junk,$ephemfiletrunc) = split ("fcopy",$ephemfile);
 ($junk,$saafiletrunc) = split ("fcopy",$saafile);
 $ephemfiletrunc =~ s/GLAST_EPH_20/\n   GLAST_EPH_20/;
 $saafiletrunc =~ s/L20/\n   L20/;
-print STDERR "$sn: today = $weekday = $ldnow; ATS planning day $ldp\n";
+print STDERR "\n$sn: today = $weekday = $ldnow; ATS planning day $ldp\n";
 print STDERR "$sn: plan mission week = $mpmw; planning date = $plandate";
 print STDERR "$sn: ephemeris and SAA file names are:\n...$ephemfiletrunc\n...$saafiletrunc\n";
 

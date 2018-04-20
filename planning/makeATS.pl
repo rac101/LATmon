@@ -99,12 +99,12 @@ $sbd = $daycount{int($1/1000)} + ($1 % 1000);
 $ephemfiletrunc =~ s/GLAST_EPH_20/\n   GLAST_EPH_20/;
 $saafiletrunc =~ s/L20/\n   L20/;
 
-print STDERR "$sn: running for Mission Week $mpmw by FORCE!\n" if ($force);
+print STDERR "\n$sn: running for Mission Week $mpmw by FORCE!\n" if ($force);
 unless ($force) {
     exit if ((abs($ldp-$ead-10) > 2) or (abs($ldp-$ebd-10) > 2) or (abs($ldp-$sad-10) > 2) or (abs($ldp-$sbd-10) > 2));
 }
 
-print STDERR "$sn: today = $weekday = $ldnow; ATS planning day = $ldp\n";
+print STDERR "\n$sn: today = $weekday = $ldnow; ATS planning day = $ldp\n";
 print STDERR "$sn: planning Mission Week = $mpmw; date = $plandate";
 print STDERR "$sn: ephemeris and SAA files are:\n...$ephemfiletrunc\n...$saafiletrunc\n";
 print STDERR "$sn: ephemeris file mission days: $ead $ebd; SAA file days: $sad $sbd\n";

@@ -58,7 +58,7 @@ $wdir = "/nfs/farm/g/glast/u55/rac/LATmetrics/memerr";
 $mnems = "LCMMEMCPUNODE LCMMEMLOG0TYP LCMMEMLOG0ADD LCMMEMLOG1TYP LCMMEMLOG1ADD LCMMEMLOG2TYP LCMMEMLOG2ADD LCMMEMLOG3TYP LCMMEMLOG3ADD";
  
 #`source /u/gl/glastops/flightops.sh`;
-$cmd = 'date --date="-3 days" +"%F 00:00:00"';
+$cmd = 'date --date="-12 days" +"%F 00:00:00"';
 $day = `$cmd`;
 chop $day;
 #print STDERR "$0: Working on day $day\n";
