@@ -24,7 +24,15 @@ STEPS
 1. use the script "allprogain.pl" on the SLAC farm to calculate values to go into the spreadsheet on the laptop:
 
 mv runall.output runall.output.old
+
 ls -1 ./GMU-CAL-XML/*proton_cal*PD.xml | allprogain.pl > runall.output
+or 
+ls -1 ./CAL-XML/*proton_cal*PD.xml | allprogain.pl > runall.output
+or
+ls -1 ./XML/*proton_cal*PD.xml | allprogain.pl > runall.output
+or
+ls -1 ./protons_pass8/*proton_cal*PD.xml | allprogain.pl > runall.output
+
 diff runall.output runall.output.old
 
 2. add the new lines to the Google Doc spreadsheet in the ISOC Team Drive: CAL-ground-calibration

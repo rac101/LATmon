@@ -23,7 +23,7 @@ $sn = basename($0);
 
 try {
     local $SIG{ALRM} = sub { die "alarm\n" };
-    alarm 90;
+    alarm 200;
     main();
     alarm 10;
 }

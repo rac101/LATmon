@@ -26,7 +26,7 @@ print "$summary\n\n";
 foreach (@inp) {
     if (/<tower row=/) {
 	print "$fm\tTKR: $tkr  Row: $row  Col: $col Planes: $ltotal   Strips = $ttotal\n\n" if ($total);
-	$summary .= " $ttotal";
+	$summary .= "\t$ttotal" if ($total);
 	/<tower row="(\d+)" col="(\d+)" hwserial="(\w+)"/;
 	$row = $1;
 	$col = $2;
@@ -44,12 +44,12 @@ foreach (@inp) {
 	/<\/uniplane>  <!-- nStrips: (\d+) -->/;
 	$total += $1;
 	$ttotal += $1;
-	print "\tTKR: $tkr\tLayer: $layer\tScount = $1\n";
+	print "\tTKR: $tkr\tLayer: $layer\tScount =\t$1\n";
     }
 }
 print "$fm\tTKR: $tkr  Row: $row  Col: $col Planes: $ltotal   Strips = $ttotal\n\n";
-$summary .= " $ttotal";
-print "$summary     $total\n";
+$summary .= "\t$ttotal";
+print "$summary\t$total\n";
 
 sub layerid {
 
