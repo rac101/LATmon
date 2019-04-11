@@ -11,6 +11,19 @@ lnxcron 30 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.MP
 lnxcron 47 * * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.hourly
 lnxcron 28 2 * * * source /u/gl/glastops/flightops.sh; source /u/gl/rac/cron.nightly
 
+=============================
+instructions for watch.pl
+
+if you get an email from watch.pl warning that you have some runaway jobs in cron:
+1. login to the SLAC farm
+2. ssh to lnxcron
+3. ps -ax    # to confirm that the job IDs reported in the email are running and using excessive CPU time
+4. kill NNNNN   # where NNNNN is the runaway job ID reported in the email from watch.pl
+5. ps -ax    # to confirm that you have correctly killed the runaway job NNNNN
+6. exit   # logoff from lnxcron
+
+=============================
+
 The following are obsolete:
 cron.daily
 cron.weekly

@@ -1,0 +1,9 @@
+Keep a running mission history of LAT Configuration verify errors
+See: https://confluence.slac.stanford.edu/display/ISOC/LATC+Verify+Errors
+
+Use commands of the form:
+DiagRet.py -b "2008-06-01 00:00:00" -e "+31 days" -m | grep DIFFER
+
+the Bash script "2loops-check-all" was used to complile a complete list of configuration mis-compares over the Fermi mission
+
+In the "dumps" sub-directory, do "pretty" LATC/LCFG dumps for each error

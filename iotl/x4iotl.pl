@@ -5,7 +5,7 @@
 # Robert Cameron
 # April 2017
 
-# usage: ./qx4iotl.pl [--days=N] [-d=N]
+# usage: ./x4iotl.pl [--days=N] [-d=N]
 # output goes to STDOUT, STDERR if necessary, and a specific output file in the pairs subdirectory
 # can be silent: no output from this script if there is nothing to update, for running in cron with minimal emails
 

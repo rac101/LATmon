@@ -1,1 +1,1 @@
-/u/gl/rac/rsync-depot/2SLAC/xtrig.py
+/u/gl/rac/rsync-depot/2SLAC/xtrigr.py

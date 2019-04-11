@@ -23,6 +23,9 @@ then produce a file that is stripped of ":" and "-" in dates, to be suitable to 
 ./strip.pl < nav > nav.strip
 
 =========NEW INFO==============
+000. in cron.hourly, to keep nav.history up to date, I am running:
+getnav-hour.pl > nav.history
+
 00.merge multiple input nav files into a single output file, 
 removing duplicates and checking for bad lines
 ./mergenav.pl nav.file1 nav.file2 [...nav.fileN] > nav.merged

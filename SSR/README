@@ -11,7 +11,7 @@ Then for adding to the excel spreadsheet:
 
 tail -20 ssr.history | perl -ane 'print "$F[19]\n"'
 tail -20 ssr.history | perl -ane 'print "$F[-3]\n"'
-tail -20 ssr.history | perl -ane 'print "$F[-6] $F[-3]\n"'
+tail -20 ssr.history | perl -ane 'print "$F[-6]\t$F[-3]\n"'
 tail -20 ssr.history | perl -ane 'print "$F[-6]\n"'
 
 ==================

@@ -7,9 +7,11 @@ My listing of SAA reports is in ./SAA.reports <<< ensure the latest correct SAA 
 My copies of SAA reports are in the subdirectory ./reports
 My full-mission summary of SAA reports comparisons are in ./output 
 ===================
-cron: ~/cron.SAA
+cron: ../cron/cron.SAA
+      ./x4saa.pl # run in cron.SAA to find and compare the 2 latest SAA reports
 ===================
-perl scripts: 
+Other Perl scripts: 
+findreports.pl: finds the latest SAA reports in the FastCopy archive. Only outputs to STDOUT
 l8stsaax.pl: very verbose and colorful: finds and compares the latest 2 SAA reports in the FastCopy archive. Only outputs to STDOUT
 l8stsaax1.pl: not verbose and colorful: finds and compares the latest 2 SAA reports in the FastCopy archive. Only outputs to STDOUT
 l8stsaax-bw.pl: very verbose and B/W: finds and compares the latest 2 SAA reports in the FastCopy archive. Only outputs to STDOUT

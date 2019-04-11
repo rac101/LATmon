@@ -12,7 +12,9 @@ to get columns of numbers for transcribing into the spreadsheet, from lines:
  Daily Ave  2012 07 21 00 00 03   2012 07 22 00 00 12           154883902 triggers / 86408 sec  >      1792.5 Hz/day     1.792 kHz/day
  Daily Ave  2012 07 22 00 00 00   2012 07 23 00 00 10           155141504 triggers / 86410 sec  >      1795.4 Hz/day     1.795 kHz/day
 
-tail -100 trigrate.jana | perl -ane 'print "$F[14]\t$F[17]\n"'
+tail -100 trigrate.jana | perl -ane 'print "$F[14]\t$F[17]\t$F[-2]\n"'
 
 # to check the time continuity of history of daily trigger count, use xtrig.pl
-# usage: ./xtrig.pl < trigrate.jana
+# usage: 
+./xtrig.pl < trigrate.jana
+./xtrigr.py < trigrate.jana

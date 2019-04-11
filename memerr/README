@@ -30,8 +30,8 @@ MnemRet.py -b '-1 seconds' -e '2012-04-19 00:00:00' SGPSBA_LONGITUDE SGPSBA_LATI
 Tabulating total memory errors:
 ===============================
 ./counts.pl < memerr.history
-./rate.pl < memerr.history - tabulate error totals (single, multi, total) per 1 million and 10 million seconds of MET
-./xmemerr.py < memerr.history - check for gaps etc in the memerr.history file
+./rate.pl < memerr.history # tabulate single, multi, total error totals per 1 million and 10 million seconds of MET
+./xmemerr.py < memerr.history # check for gaps etc in the memerr.history file
 
 Plotting memory errors on a map of the Earth: 
 ============================================

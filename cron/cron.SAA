@@ -21,5 +21,5 @@ $WDIR/output/reversefile.pl < $WDIR/output/saax.txt >| $WDIR/output/SAAcheck.txt
 #rm $ODIR/SAAcheck.txt
 \cp $WDIR/output/SAAcheck.txt $ODIR
 #
-$WDIR/xl8stsaa.pl >| $ODIR/SAAcheck.latest
+$WDIR/xl8stsaa.pl >| $ODIR/SAAcheck.latest    ## commented out on 2018 Oct 9 due to cron excution problems
 \tac $WDIR/SAA.reports >| $ODIR/SAAreports.txt
